@@ -1,0 +1,1208 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "688794f1-62d8-4f4f-821a-497c73240401")
+	(paper "A4")
+	(lib_symbols
+		(symbol "mcu_adapter-eagle-import:XIAO-THRUHOLE"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -20.32 24.13 0)
+				(effects
+					(font
+						(size 1.27 1.0795)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Value" ""
+				(at -20.32 22.86 0)
+				(effects
+					(font
+						(size 1.27 1.0795)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Footprint" "mcu_adapter:XIAO-GENERIC-THRUHOLE-MODULE14P-2.54-21X17.8MM"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Seeed Studio XIAO Series Through-hole Footprint and Symbol Basic through-hole footprint for Seeed XIAO series of boards. The underside surface mount pads are disabled. For through-hole mounting, a pair of 7-pin, 2.54mm pitch headers with 0.64x0.64mm square leads are recommended. The hybrid variant allows the assembler to choose between surface mount and through-hole mounting methods. However, there is a risk of solder leakage and therefore insufficient solder at the joints if soldering using solder paste and stencils, so we advise using this footprint only when the module is intended to be hand soldered.\n\nThe symbol pin labels are generic. Please refer to the specific board for more information.\n\nSeeed Studio XIAO SAMD21 (Seeeduino XIAO) is also available pre-soldered:\n\nSeeed Studio XIAO SAMD21 Pre-soldered - Microchip ATSAMD21G18 Arduino Microcontroller with headers\nSeeed SKU: 102010388\n\nhttps://www.seeedstudio.com/Seeeduino-XIAO-Pre-Soldered-p-4747.html Buy now"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "XIAO-THRUHOLE_1_0"
+				(polyline
+					(pts
+						(xy -20.32 22.86) (xy -20.32 10.16)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 10.16) (xy -21.59 10.16)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 10.16) (xy -20.32 6.35)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 6.35) (xy -21.59 6.35)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 6.35) (xy -20.32 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 2.54) (xy -21.59 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 2.54) (xy -20.32 -12.7)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 -1.27) (xy -21.59 -1.27)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 -5.08) (xy -21.59 -5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 -8.89) (xy -21.59 -8.89)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 -12.7) (xy -21.59 -12.7)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 -12.7) (xy -20.32 -22.86)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -20.32 -22.86) (xy -2.54 -22.86)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -5.08 22.86) (xy -20.32 22.86)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 -22.86) (xy 5.08 -22.86)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 22.86) (xy -5.08 22.86)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 22.86) (xy -1.27 22.86)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 5.08 -22.86) (xy 21.59 -22.86)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 6.35 22.86) (xy 2.54 22.86)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 21.59 22.86) (xy 6.35 22.86)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 21.59 -22.86) (xy 21.59 22.86)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 22.86 10.16) (xy 21.59 10.16)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 22.86 6.35) (xy 21.59 6.35)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 22.86 2.54) (xy 21.59 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 22.86 -1.27) (xy 21.59 -1.27)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 22.86 -5.08) (xy 21.59 -5.08)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 22.86 -8.89) (xy 21.59 -8.89)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 22.86 -12.7) (xy 21.59 -12.7)
+					)
+					(stroke
+						(width 0.1524)
+						(type solid)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -24.13 10.16 0)
+					(length 2.54)
+					(name "P1_A0_D0"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -24.13 6.35 0)
+					(length 2.54)
+					(name "P2_A1_D1"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -24.13 2.54 0)
+					(length 2.54)
+					(name "P3_A2_D2"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -24.13 -1.27 0)
+					(length 2.54)
+					(name "P4_A3_D3"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -24.13 -5.08 0)
+					(length 2.54)
+					(name "P5_D4_SDA"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -24.13 -8.89 0)
+					(length 2.54)
+					(name "P6_D5_SCL"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -24.13 -12.7 0)
+					(length 2.54)
+					(name "P7_D6_TX"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 25.4 10.16 180)
+					(length 2.54)
+					(name "P14_5V"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 25.4 6.35 180)
+					(length 2.54)
+					(name "P13_GND"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 25.4 2.54 180)
+					(length 2.54)
+					(name "P12_3V3"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 25.4 -1.27 180)
+					(length 2.54)
+					(name "P11_D10_MOSI"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 25.4 -5.08 180)
+					(length 2.54)
+					(name "P10_D9_MISO"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 25.4 -8.89 180)
+					(length 2.54)
+					(name "P9_D8_SCK"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 25.4 -12.7 180)
+					(length 2.54)
+					(name "P8_D7_RX"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.524 1.524)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(wire
+		(pts
+			(xy 179.578 109.22) (xy 170.18 109.22)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "13b79feb-ea15-4120-b3fa-cb1c27b48f70")
+	)
+	(wire
+		(pts
+			(xy 109.474 113.03) (xy 120.65 113.03)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "1478b46e-2298-4ada-8f69-e562aed31019")
+	)
+	(wire
+		(pts
+			(xy 181.864 106.68) (xy 181.864 113.03)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "29fc58ab-db9e-4648-aca7-4e52c58645ee")
+	)
+	(wire
+		(pts
+			(xy 104.14 99.06) (xy 116.332 99.06)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "3d418eef-14c5-486f-b708-526655afacbd")
+	)
+	(wire
+		(pts
+			(xy 177.292 105.41) (xy 170.18 105.41)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "3f120cac-8aea-4790-aedc-418b305cbff9")
+	)
+	(wire
+		(pts
+			(xy 175.006 99.06) (xy 175.006 101.6)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "54dd8aa9-9329-4f6a-aa9b-7f9436580fec")
+	)
+	(wire
+		(pts
+			(xy 172.974 97.79) (xy 170.18 97.79)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "69c35876-92a2-4f83-a43d-df736552b89c")
+	)
+	(wire
+		(pts
+			(xy 109.474 106.68) (xy 109.474 113.03)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "6b8bfc6c-236e-4f99-b4df-baf7104dba00")
+	)
+	(wire
+		(pts
+			(xy 114.3 101.6) (xy 114.3 105.41)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "6c9b8c5f-a6fe-4fca-bb39-8fae2c4298dc")
+	)
+	(wire
+		(pts
+			(xy 175.006 101.6) (xy 170.18 101.6)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "6ce746f6-a703-4847-a318-678679bb5ef7")
+	)
+	(wire
+		(pts
+			(xy 104.14 93.98) (xy 120.65 93.98)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "6e23e193-217e-4e25-9708-b44e68b9fc39")
+	)
+	(wire
+		(pts
+			(xy 188.976 93.98) (xy 170.18 93.98)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "71b9cff4-5bc1-40d2-82c6-bc06fa63de97")
+	)
+	(wire
+		(pts
+			(xy 104.14 106.68) (xy 109.474 106.68)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "71ba9026-2944-448f-b04f-f0f7446cb048")
+	)
+	(wire
+		(pts
+			(xy 188.976 101.6) (xy 177.292 101.6)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "75e68ba1-83ad-4cfa-9a44-5b6a74ff8df4")
+	)
+	(wire
+		(pts
+			(xy 188.976 104.14) (xy 179.578 104.14)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "785a00eb-6f12-4357-abdf-89d71ff86200")
+	)
+	(wire
+		(pts
+			(xy 118.11 97.79) (xy 120.65 97.79)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "81f023f8-a170-4786-8742-5f9515ee484c")
+	)
+	(wire
+		(pts
+			(xy 116.332 99.06) (xy 116.332 101.6)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "826f6f35-4721-4570-9cf1-c22fed6e4064")
+	)
+	(wire
+		(pts
+			(xy 104.14 104.14) (xy 111.76 104.14)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "97e55c61-fb80-4183-8e11-90584bf2c19f")
+	)
+	(wire
+		(pts
+			(xy 188.976 96.52) (xy 172.974 96.52)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "9bd439e9-5ec1-4474-a87a-d9034e4456d3")
+	)
+	(wire
+		(pts
+			(xy 188.976 106.68) (xy 181.864 106.68)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "9c121048-668e-43ad-bac0-e571cc9b0ce0")
+	)
+	(wire
+		(pts
+			(xy 172.974 96.52) (xy 172.974 97.79)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "a1a07289-31bf-404a-b978-b23c2b7cd419")
+	)
+	(wire
+		(pts
+			(xy 111.76 104.14) (xy 111.76 109.22)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "a86586be-de23-4213-807a-a07f7fbed088")
+	)
+	(wire
+		(pts
+			(xy 188.976 99.06) (xy 175.006 99.06)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "ab0131e1-f810-445a-a39e-6eba755e7c88")
+	)
+	(wire
+		(pts
+			(xy 104.14 96.52) (xy 118.11 96.52)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "b9d7a914-b58d-4973-a92f-9d91c7f40e6c")
+	)
+	(wire
+		(pts
+			(xy 181.864 113.03) (xy 170.18 113.03)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "bb0e4adc-94cf-4b62-be20-0ddb8221ce3a")
+	)
+	(wire
+		(pts
+			(xy 177.292 101.6) (xy 177.292 105.41)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "bbf7cffb-3a36-4b6f-b470-5e286d5d4403")
+	)
+	(wire
+		(pts
+			(xy 114.3 105.41) (xy 120.65 105.41)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "bd0a2ebe-3fba-443f-a399-6ba2cedfb7c9")
+	)
+	(wire
+		(pts
+			(xy 104.14 101.6) (xy 114.3 101.6)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "c0af3276-6330-401f-a860-24131d2a965a")
+	)
+	(wire
+		(pts
+			(xy 118.11 96.52) (xy 118.11 97.79)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "cddb9838-e7f3-4cc9-9bc7-9c8edfb0de2a")
+	)
+	(wire
+		(pts
+			(xy 116.332 101.6) (xy 120.65 101.6)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "d07ff98b-42fb-4e17-9709-18ac6b435c1a")
+	)
+	(wire
+		(pts
+			(xy 179.578 104.14) (xy 179.578 109.22)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "dc82f530-70ca-41f0-a652-3e63b770d17e")
+	)
+	(wire
+		(pts
+			(xy 111.76 109.22) (xy 120.65 109.22)
+		)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(uuid "f8f3653e-fa95-428e-87e1-226659a5845a")
+	)
+	(label "D0"
+		(at 104.14 93.98 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "4da5e2b4-e72d-4ccf-a39b-b64d402f3f02")
+	)
+	(label "GND"
+		(at 182.88 96.52 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "4e18fb2a-34e4-4589-ba2b-d3ff910d5b17")
+	)
+	(label "3V3"
+		(at 182.88 99.06 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "4fc7de02-21f3-48a9-ac11-5fd94b5b70de")
+	)
+	(label "D2"
+		(at 104.14 99.06 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "5ae9e9e6-8364-48c3-a193-2d71cb24af3d")
+	)
+	(label "D8"
+		(at 182.88 106.68 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "8b4dc5a7-a0d8-4bdb-a5f6-e2e56a0b0494")
+	)
+	(label "D3"
+		(at 104.14 101.6 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "93b0d4fe-bf63-44c1-82e1-3fb559c5d2b7")
+	)
+	(label "D10"
+		(at 182.88 101.6 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "942eec75-75f7-4af6-b8a3-d9e20efa22d3")
+	)
+	(label "SDA"
+		(at 104.14 104.14 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "ba20318d-67a5-4f0e-94ad-ad4a612c4b00")
+	)
+	(label "5V"
+		(at 182.88 93.98 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "c436e362-cfcd-4ac3-bf0f-8a5bac2d0331")
+	)
+	(label "D9"
+		(at 182.88 104.14 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "d98e50f0-ed72-478c-b9b0-e903d68dec83")
+	)
+	(label "SCL"
+		(at 104.14 106.68 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "e931b9b3-992b-4665-9fb3-39101e31d587")
+	)
+	(label "D1"
+		(at 104.14 96.52 0)
+		(effects
+			(font
+				(size 1.2446 1.2446)
+			)
+			(justify left bottom)
+		)
+		(uuid "fb37d1f1-c53b-46cd-97d0-7621dffbc179")
+	)
+	(symbol
+		(lib_id "mcu_adapter-eagle-import:XIAO-THRUHOLE")
+		(at 144.78 104.14 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "29760363-778e-4a1b-a0d5-98b560e0a07d")
+		(property "Reference" "U1"
+			(at 145.415 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.0795)
+				)
+			)
+		)
+		(property "Value" "XIAO RP2040"
+			(at 145.415 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.0795)
+				)
+			)
+		)
+		(property "Footprint" "mcu_adapter:XIAO-GENERIC-THRUHOLE-MODULE14P-2.54-21X17.8MM"
+			(at 144.78 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Seeed Studio XIAO Series Through-hole Footprint and Symbol Basic through-hole footprint for Seeed XIAO series of boards. The underside surface mount pads are disabled. For through-hole mounting, a pair of 7-pin, 2.54mm pitch headers with 0.64x0.64mm square leads are recommended. The hybrid variant allows the assembler to choose between surface mount and through-hole mounting methods. However, there is a risk of solder leakage and therefore insufficient solder at the joints if soldering using solder paste and stencils, so we advise using this footprint only when the module is intended to be hand soldered.\n\nThe symbol pin labels are generic. Please refer to the specific board for more information.\n\nSeeed Studio XIAO SAMD21 (Seeeduino XIAO) is also available pre-soldered:\n\nSeeed Studio XIAO SAMD21 Pre-soldered - Microchip ATSAMD21G18 Arduino Microcontroller with headers\nSeeed SKU: 102010388\n\nhttps://www.seeedstudio.com/Seeeduino-XIAO-Pre-Soldered-p-4747.html Buy now"
+			(at 144.78 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "50216822-e147-47d7-9e44-4ca22f5322c5")
+		)
+		(pin "5"
+			(uuid "b446435b-8c84-4f7b-87bf-4dd1a34d93cb")
+		)
+		(pin "1"
+			(uuid "86f28be2-3ba0-4735-ab1b-188570762746")
+		)
+		(pin "3"
+			(uuid "09da1bcd-cfad-4ae6-8ee7-b094325d085b")
+		)
+		(pin "4"
+			(uuid "3fee49ec-b125-4c48-8729-32fd2d5829f1")
+		)
+		(pin "6"
+			(uuid "42c68509-f6d9-490b-ab3d-12c54856e12c")
+		)
+		(pin "7"
+			(uuid "a4a3abd9-12af-4f0a-8dfe-5e7f2e9d9a4a")
+		)
+		(pin "14"
+			(uuid "247d44dc-d36f-4f6d-9ef7-2d3e4873539a")
+		)
+		(pin "11"
+			(uuid "76e8084a-adeb-4c63-bc8c-e24b5db056af")
+		)
+		(pin "10"
+			(uuid "f9766a4e-684e-4b70-b937-cc11ef13fc31")
+		)
+		(pin "9"
+			(uuid "eef85a54-8fe3-4f7d-b7d0-51d23a00e361")
+		)
+		(pin "13"
+			(uuid "18cf65d5-6b01-42b5-8a4d-5c59727cb7ea")
+		)
+		(pin "12"
+			(uuid "ada9589c-5e81-4220-8dd5-9b8aa4a92021")
+		)
+		(pin "8"
+			(uuid "54712688-bad1-46d1-9e16-4b202dbecb6f")
+		)
+		(instances
+			(project ""
+				(path "/688794f1-62d8-4f4f-821a-497c73240401"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
