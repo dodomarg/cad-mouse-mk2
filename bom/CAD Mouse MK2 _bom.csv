@@ -1,9 +1,9 @@
-Qty,Part,Link
-1,Seeed Studio XIAO RP2040,https://geni.us/9SqAMi
-1,Assembled Sensor Board with MCU Adapter,https://bit.ly/48rovz3
-16,M3 x 4 Heat-Set Inserts,https://geni.us/s0GG2
-10,M3 x 16 Hexagon Socket Head Cap Screw,https://geni.us/ncMxqyo
-5,M3 x 12 Hexagon Socket Head Cap Screw,https://geni.us/ncMxqyo
-1,M3 x 4 Hexagon Socket Head Cap Screw,https://geni.us/ncMxqyo
-6,6mm x 3mm Neodymium Magnets,https://geni.us/JU58
-4,Rubber Bumper Feet,https://geni.us/vBw7v
+Qty,Part,Affiliate link for @sb-ocr,alternative link
+1,Seeed Studio XIAO ESP32S3,,
+1,Assembled Sensor Board with MCU Adapter,https://bit.ly/48rovz3,
+16,M3 x 5mm OD x 4mm L Heat-Set Inserts,https://geni.us/s0GG2,https://jlcmc.com/product/s/E04/EMLZ/heat-set-threaded-inserts-brass
+10,M3 x 16 Hexagon Socket Head Cap Screw,https://geni.us/ncMxqyo,https://jlcmc.com/product/s/E02/EDLA/din-912-gb-t-70.1-standard-socket-head-cap-screws-full---half-thread
+5,M3 x 12 Hexagon Socket Head Cap Screw,https://geni.us/ncMxqyo,https://jlcmc.com/product/s/E02/EDLA/din-912-gb-t-70.1-standard-socket-head-cap-screws-full---half-thread
+1,M3 x 4 Hexagon Socket Head Cap Screw,https://geni.us/ncMxqyo,https://jlcmc.com/product/s/E02/EDLA/din-912-gb-t-70.1-standard-socket-head-cap-screws-full---half-thread
+6,6mm x 3mm Neodymium Magnets (N35),https://geni.us/JU58,
+4,Rubber Bumper Feet,https://geni.us/vBw7v,

@@ -528,7 +528,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "GERBER",
+      "plot": "../fab/JLCPCB/sensor_board/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",

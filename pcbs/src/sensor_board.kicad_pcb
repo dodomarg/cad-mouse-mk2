@@ -63,7 +63,7 @@
 			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
-			(usegerberattributes no)
+			(usegerberattributes yes)
 			(usegerberadvancedattributes yes)
 			(creategerberjobfile yes)
 			(dashed_line_dash_ratio 12)
@@ -92,7 +92,7 @@
 			(mirror no)
 			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "GERBER/pcbway/")
+			(outputdirectory "../fab/JLCPCB/sensor_board/")
 		)
 	)
 	(footprint "sensor_board:SOT95P280X145-5N_vf.s1_3h01YRRe2BlOdhheUSQ"
