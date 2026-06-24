@@ -41,3 +41,25 @@ Rz = sum_i (posXi * magYi - posYi * magXi)
 - `Ry`: left-right z difference across the top edge
 - `Rx`: top pair versus bottom, scaled for the triangle geometry
 - `Rz`: twist estimate from the x/y sensor positions
+
+## Supported boards / building
+
+The firmware targets the Seeed XIAO form factor and can be built for two boards
+via [`platformio.ini`](../platformio.ini):
+
+- `seeed_xiao_esp32s3` &mdash; Seeed XIAO ESP32-S3 (default). USB is routed
+  through the TinyUSB USB-OTG stack (`ARDUINO_USB_MODE=0`) so the custom 6DoF
+  HID descriptor is exposed, while the CDC serial port stays available for
+  telemetry.
+- `seeed_xiao_rp2040` &mdash; Seeed XIAO RP2040 (original board).
+
+Because both XIAO boards share the same D-labelled pinout, the pin assignments
+in [`Config.h`](include/Config.h) are identical for both targets.
+
+```bash
+# Build/upload the default ESP32-S3 target
+pio run -t upload
+
+# Build/upload the RP2040 target
+pio run -e seeed_xiao_rp2040 -t upload
+```

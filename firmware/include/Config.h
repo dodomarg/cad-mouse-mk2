@@ -6,7 +6,8 @@ namespace Config {
 
 const bool ENABLE_TELEMETRY = true;
 
-// Hardware pins (XIAO RP2040)
+// Hardware pins (Seeed XIAO form factor: D-labelled pads are identical on the
+// XIAO RP2040 and XIAO ESP32-S3, so the same constants work for both boards).
 const int PIN_RIGHT_BTN = D0;
 const int PIN_LEFT_BTN = D2;
 const int PIN_LED_DATA = D3;

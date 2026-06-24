@@ -44,6 +44,11 @@ void HIDController::begin() {
   if (!TinyUSBDevice.isInitialized()) {
     TinyUSBDevice.begin(0);
   }
+#ifdef ARDUINO_ARCH_ESP32
+  // On the RP2040 the product string is provided via a build flag; the
+  // arduino-esp32 core has no equivalent, so set it here for parity.
+  TinyUSBDevice.setProductDescriptor("CAD Mouse MK2");
+#endif
   usbHid_.setReportDescriptor(kHidReportDescriptor, sizeof(kHidReportDescriptor));
   usbHid_.setPollInterval(1);
   usbHid_.begin();
