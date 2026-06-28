@@ -1,3 +1,13 @@
 .pio
 .vscode
 .DS_Store
+pcbs/src/.history
+
+# Local-only PlatformIO overrides (e.g. spoofed USB VID/PID for testing)
+platformio_local*.ini
+local/
+
+# FreeCAD backups and exports
+*.FCBak
+*.FCStd1
+enclosure/FreeCAD/**/*.step

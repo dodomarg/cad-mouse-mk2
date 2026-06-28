@@ -40,21 +40,47 @@ const uint8_t kHidReportDescriptor[] PROGMEM = {
 };
 }
 
+#ifdef ARDUINO_ARCH_ESP32
+HIDController::HIDController() {
+  // The custom HID device must be registered before the USB stack assembles
+  // its descriptors, so this has to happen at construction time rather than in
+  // begin(); otherwise wDescriptorLength is reported as 0 and the host rejects
+  // the HID interface (Linux: "can't add hid device: -22").
+  static bool registered = false;
+  if (!registered) {
+    registered = true;
+    usbHid_.addDevice(this, sizeof(kHidReportDescriptor));
+  }
+}
+
+uint16_t HIDController::_onGetDescriptor(uint8_t* buffer) {
+  memcpy(buffer, kHidReportDescriptor, sizeof(kHidReportDescriptor));
+  return sizeof(kHidReportDescriptor);
+}
+
+void HIDController::begin() {
+  // On the RP2040 the product string is provided via a build flag; the
+  // arduino-esp32 core has no equivalent, so set it here for parity.
+  USB.productName("CAD Mouse MK2");
+  usbHid_.begin();
+  USB.begin();
+}
+
+void HIDController::task() {}
+#else
+HIDController::HIDController() {}
+
 void HIDController::begin() {
   if (!TinyUSBDevice.isInitialized()) {
     TinyUSBDevice.begin(0);
   }
-#ifdef ARDUINO_ARCH_ESP32
-  // On the RP2040 the product string is provided via a build flag; the
-  // arduino-esp32 core has no equivalent, so set it here for parity.
-  TinyUSBDevice.setProductDescriptor("CAD Mouse MK2");
-#endif
   usbHid_.setReportDescriptor(kHidReportDescriptor, sizeof(kHidReportDescriptor));
   usbHid_.setPollInterval(1);
   usbHid_.begin();
 }
 
 void HIDController::task() { TinyUSBDevice.task(); }
+#endif
 
 HIDController::ReportAxes HIDController::makeAxesReport(const float motion[6]) {
   ReportAxes axes{};
@@ -86,14 +112,22 @@ bool HIDController::sendReports(const float motion[6], uint16_t buttonBits) {
   }
 
   if (sendAxes) {
+#ifdef ARDUINO_ARCH_ESP32
+    usbHid_.SendReport(0x01, &axes, sizeof(axes));
+#else
     usbHid_.sendReport(0x01, &axes, sizeof(axes));
+#endif
     lastSentAxes_ = axes;
   }
 
   if (sendButtons) {
     ReportButtons btn{};
     btn.bits = buttonBits & 0x0003;
+#ifdef ARDUINO_ARCH_ESP32
+    usbHid_.SendReport(0x03, &btn, sizeof(btn));
+#else
     usbHid_.sendReport(0x03, &btn, sizeof(btn));
+#endif
     buttonBitsSent_ = buttonBits;
   }
 

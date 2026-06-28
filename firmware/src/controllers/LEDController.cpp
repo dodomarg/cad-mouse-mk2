@@ -20,7 +20,8 @@ unsigned long LEDController::toNeoColor(unsigned long color) {
 
 void LEDController::begin() {
   pinMode(Config::PIN_LED_LS, OUTPUT);
-  digitalWrite(Config::PIN_LED_LS, LOW);
+  // AP22817B load switch is active-low (EN high = off).
+  digitalWrite(Config::PIN_LED_LS, HIGH);
 
   ring_.begin();
   ring_.setBrightness(Config::LED_BRIGHTNESS);
@@ -33,7 +34,8 @@ void LEDController::setPower(bool enabled) {
   }
 
   isPowered_ = enabled;
-  digitalWrite(Config::PIN_LED_LS, enabled ? HIGH : LOW);
+  // AP22817B load switch is active-low (EN low = on).
+  digitalWrite(Config::PIN_LED_LS, enabled ? LOW : HIGH);
   delay(10);
   
 }
