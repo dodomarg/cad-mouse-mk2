@@ -59,9 +59,27 @@ uint16_t HIDController::_onGetDescriptor(uint8_t* buffer) {
 }
 
 void HIDController::begin() {
-  // On the RP2040 the product string is provided via a build flag; the
-  // arduino-esp32 core has no equivalent, so set it here for parity.
+  begin(0, 0);
+}
+
+void HIDController::begin(uint16_t vid, uint16_t pid) {
+  // With ARDUINO_USB_CDC_ON_BOOT=0 the core does NOT auto-start USB at boot, so
+  // these runtime descriptors are applied before USB.begin() and actually take
+  // effect (USB.VID()/PID() are ignored once the stack has started).
+  if (vid != 0) {
+    USB.VID(vid);
+  }
+  if (pid != 0) {
+    USB.PID(pid);
+  }
+#ifdef USB_MANUFACTURER
+  USB.manufacturerName(USB_MANUFACTURER);
+#endif
+#ifdef USB_PRODUCT
+  USB.productName(USB_PRODUCT);
+#else
   USB.productName("CAD Mouse MK2");
+#endif
   usbHid_.begin();
   USB.begin();
 }
@@ -78,6 +96,8 @@ void HIDController::begin() {
   usbHid_.setPollInterval(1);
   usbHid_.begin();
 }
+
+void HIDController::begin(uint16_t /*vid*/, uint16_t /*pid*/) { begin(); }
 
 void HIDController::task() { TinyUSBDevice.task(); }
 #endif

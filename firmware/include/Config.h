@@ -39,6 +39,11 @@ const int LED_COUNT = 8;
 const int LED_BRIGHTNESS = 40;
 const unsigned long LED_IDLE_COLOR = 0x00FF00;
 const unsigned long LED_CALIBRATING_COLOR = 0x0000FF;
+const unsigned long LED_CONFIG_COLOR = 0xFFFF00;
+
+// Config portal (entered by holding both buttons at power-up). Open SoftAP
+// serving a web UI for setting USB identity and running calibration.
+const char* const CONFIG_AP_SSID = "CAD-Mouse-Config";
 
 // FSM timing
 const long IDLE_SLEEP_TIMEOUT_MS = 2 * 60 * 1000;

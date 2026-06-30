@@ -55,8 +55,24 @@ float MotionController::axisBaseDead(int i) {
   return (i < 3) ? Config::DEAD_T : Config::DEAD_R;
 }
 
-void MotionController::compute(const float raw[9], const float* baseline, float dt,
-                               float out[6]) {
+float MotionController::normalizeAxis(int i, float y) const {
+  if (!cal_.valid) {
+    return y;
+  }
+  // Map the captured full-range extreme onto +/-AXIS_LIMIT, handling the
+  // positive and negative travel independently so asymmetric ranges still
+  // reach the full limit on each side.
+  const float kEps = 1e-3f;
+  if (y >= 0.0f) {
+    const float hi = cal_.max[i];
+    return (hi > kEps) ? (y / hi) * Config::AXIS_LIMIT : y;
+  }
+  const float lo = cal_.min[i];
+  return (lo < -kEps) ? (y / (-lo)) * Config::AXIS_LIMIT : y;
+}
+
+void MotionController::mixAxes(const float raw[9], const float* baseline,
+                               float y[6]) const {
   // Baseline subtraction converts magnetic deltas around the calibrated rest pose.
   const float mag1x = raw[RAW_MAG1_X] - baseline[RAW_MAG1_X];
   const float mag1y = raw[RAW_MAG1_Y] - baseline[RAW_MAG1_Y];
@@ -107,13 +123,24 @@ void MotionController::compute(const float raw[9], const float* baseline, float 
   const float rz = swirlNum;
 
   // Apply sign fixes and gains
-  float y[6];
   y[AXIS_TX] = Config::SIGN_AXIS[AXIS_TX] * tx * Config::GAIN_T[AXIS_TX];
   y[AXIS_TY] = Config::SIGN_AXIS[AXIS_TY] * ty * Config::GAIN_T[AXIS_TY];
   y[AXIS_TZ] = Config::SIGN_AXIS[AXIS_TZ] * tz * Config::GAIN_T[AXIS_TZ];
   y[AXIS_RX] = Config::SIGN_AXIS[AXIS_RX] * rx * Config::GAIN_R[AXIS_RX - 3];
   y[AXIS_RY] = Config::SIGN_AXIS[AXIS_RY] * ry * Config::GAIN_R[AXIS_RY - 3];
   y[AXIS_RZ] = Config::SIGN_AXIS[AXIS_RZ] * rz * Config::GAIN_R[AXIS_RZ - 3];
+}
+
+void MotionController::compute(const float raw[9], const float* baseline, float dt,
+                               float out[6]) {
+  float y[6];
+  mixAxes(raw, baseline, y);
+
+  // Normalize against the stored full-range calibration before the dead-zone
+  // and smoothing stages so thresholds apply in the +/-AXIS_LIMIT space.
+  for (int i = 0; i < 6; i++) {
+    y[i] = normalizeAxis(i, y[i]);
+  }
 
   // Filter, clamp to range and dead zones.
   motionActive_ = false;

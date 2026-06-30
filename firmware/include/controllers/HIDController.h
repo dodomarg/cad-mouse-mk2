@@ -17,6 +17,7 @@ class HIDController
  public:
   HIDController();
   void begin();
+  void begin(uint16_t vid, uint16_t pid);
   void task();
   bool sendReports(const float motion[6], uint16_t buttonBits);
 
