@@ -316,6 +316,16 @@ String joinInts(const int8_t* v, int n) {
   return s;
 }
 
+// Parses a single float, requiring the entire string to be consumed.
+bool parseFloatStrict(const String& s, float& out) {
+  if (s.length() == 0) return false;
+  char* end = nullptr;
+  const float v = strtof(s.c_str(), &end);
+  if (end == s.c_str() || *end != '\0') return false;
+  out = v;
+  return true;
+}
+
 }  // namespace
 
 ConfigPortal::ConfigPortal(Settings& settings, SensorController& sensors,
@@ -466,14 +476,12 @@ void ConfigPortal::handlePostMotion() {
   const String smoothTauSStr = server_.arg("smoothTauS");
   const String axisLimitStr = server_.arg("axisLimit");
 
-  char* end = nullptr;
-  const float radiusMm = strtof(radiusMmStr.c_str(), &end);
-  if (end == radiusMmStr.c_str() || radiusMm <= 0.0f) {
+  float radiusMm, zOffsetMm, deadT, deadR, smoothTauS, axisLimit;
+  if (!parseFloatStrict(radiusMmStr, radiusMm) || radiusMm <= 0.0f) {
     server_.send(400, "text/plain", "invalid radiusMm");
     return;
   }
-  const float zOffsetMm = strtof(zOffsetMmStr.c_str(), &end);
-  if (end == zOffsetMmStr.c_str()) {
+  if (!parseFloatStrict(zOffsetMmStr, zOffsetMm)) {
     server_.send(400, "text/plain", "invalid zOffsetMm");
     return;
   }
@@ -486,11 +494,10 @@ void ConfigPortal::handlePostMotion() {
     server_.send(400, "text/plain", "invalid gainT/gainR/signAxis");
     return;
   }
-  const float deadT = strtof(deadTStr.c_str(), &end);
-  const float deadR = strtof(deadRStr.c_str(), &end);
-  const float smoothTauS = strtof(smoothTauSStr.c_str(), &end);
-  const float axisLimit = strtof(axisLimitStr.c_str(), &end);
-  if (deadT < 0.0f || deadR < 0.0f || smoothTauS < 0.0f || axisLimit <= 0.0f) {
+  if (!parseFloatStrict(deadTStr, deadT) || !parseFloatStrict(deadRStr, deadR) ||
+      !parseFloatStrict(smoothTauSStr, smoothTauS) ||
+      !parseFloatStrict(axisLimitStr, axisLimit) ||
+      deadT < 0.0f || deadR < 0.0f || smoothTauS < 0.0f || axisLimit <= 0.0f) {
     server_.send(400, "text/plain", "invalid dead/smooth/limit");
     return;
   }
