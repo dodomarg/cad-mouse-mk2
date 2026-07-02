@@ -3,8 +3,6 @@
 #include <Arduino.h>
 #include <math.h>
 
-#include "Config.h"
-
 namespace {
 enum RawIndex {
   RAW_MAG1_X = 0,
@@ -51,8 +49,8 @@ float MotionController::lowpass(float prev, float x, float dt, float tau) {
   return prev + a * (x - prev);
 }
 
-float MotionController::axisBaseDead(int i) {
-  return (i < 3) ? Config::DEAD_T : Config::DEAD_R;
+float MotionController::axisBaseDead(int i) const {
+  return (i < 3) ? params_.deadT : params_.deadR;
 }
 
 float MotionController::normalizeAxis(int i, float y) const {
@@ -65,10 +63,10 @@ float MotionController::normalizeAxis(int i, float y) const {
   const float kEps = 1e-3f;
   if (y >= 0.0f) {
     const float hi = cal_.max[i];
-    return (hi > kEps) ? (y / hi) * Config::AXIS_LIMIT : y;
+    return (hi > kEps) ? (y / hi) * params_.axisLimit : y;
   }
   const float lo = cal_.min[i];
-  return (lo < -kEps) ? (y / (-lo)) * Config::AXIS_LIMIT : y;
+  return (lo < -kEps) ? (y / (-lo)) * params_.axisLimit : y;
 }
 
 void MotionController::mixAxes(const float raw[9], const float* baseline,
@@ -84,51 +82,66 @@ void MotionController::mixAxes(const float raw[9], const float* baseline,
   const float mag3y = raw[RAW_MAG3_Y] - baseline[RAW_MAG3_Y];
   const float mag3z = raw[RAW_MAG3_Z] - baseline[RAW_MAG3_Z];
 
-  // Translation:
-  //   Tx = (mag1x + mag2x + mag3x) / 3
-  //   Ty = (mag1y + mag2y + mag3y) / 3
-  //   Tz = (mag1z + mag2z + mag3z) / 3
-  const float tx = (mag1x + mag2x + mag3x) / 3.0;
-  const float ty = (mag1y + mag2y + mag3y) / 3.0;
-  const float tz = (mag1z + mag2z + mag3z) / 3.0;
-
-  // Physical PCB layout:
-  // MAG2 = top left, MAG3 = top right, MAG1 = bottom.
-  const float mag2PosX = -0.5;
-  const float mag2PosY = sqrt(3.0) / 6.0;
-
-  const float mag3PosX = 0.5;
-  const float mag3PosY = sqrt(3.0) / 6.0;
-
-  const float mag1PosX = 0.0;
-  const float mag1PosY = -sqrt(3.0) / 3.0;
-
-  // Rotation estimates:
-  //   Ry = mag3z - mag2z
-  //     right sensor minus left sensor
-  //     -> side to side tilt across the top edge
+  // Magnet-plane geometry: three points 120 degrees apart around a circle of
+  // radius R, mag1 on the negative Y axis, mag2 in the second quadrant, mag3
+  // in the first quadrant. The magnet plane sits a distance Z0 above the
+  // (parallel, non-rotated) sensor plane along the shared axis.
   //
-  //   Rx = sqrt(3) * (mag2z + mag3z - 2 * mag1z) / 3
-  //     top pair minus bottom sensor
-  //     -> front/back tilt of the triangle
-  const float rx = (sqrt(3.0) * (mag2z + mag3z - 2.0 * mag1z)) / 3.0;
-  const float ry = (mag3z - mag2z);
+  //   mag1 = (0, -R)
+  //   mag2 = (-R*sqrt(3)/2, R/2)
+  //   mag3 = (+R*sqrt(3)/2, R/2)
+  //
+  // Guard against a degenerate zero radius (would make every formula below
+  // divide by zero) by clamping to a tiny positive value.
+  const float r = fmax(params_.radiusMm, 1e-3f);
+  const float z0 = params_.zOffsetMm;
 
-  //   Rz = sum_i (posXi * magYi - posYi * magXi)
-  // Each sensor contributes according to its x/y position in the triangle.
+  const float mag1PosX = 0.0f;
+  const float mag1PosY = -r;
+  const float mag2PosX = -r * sqrt(3.0f) / 2.0f;
+  const float mag2PosY = r / 2.0f;
+  const float mag3PosX = r * sqrt(3.0f) / 2.0f;
+  const float mag3PosY = r / 2.0f;
+
+  // Rigid-body model: for small translations T=(Tx,Ty,Tz) and rotations
+  // R=(Rx,Ry,Rz) of the magnet plane about the shared axis' origin, the
+  // in-plane displacement measured above magnet i at position (xi, yi, z0)
+  // is approximately:
+  //   dxi = Tx + Ry*z0 - Rz*yi
+  //   dyi = Ty + Rz*xi - Rx*z0
+  //   dzi = Tz + Rx*yi - Ry*xi
+  //
+  // With the symmetric 120 degree layout (sum xi = sum yi = 0, and every
+  // point at distance R from the axis so xi^2+yi^2 = R^2), these invert to
+  // closed form below without needing a general least-squares solve.
+
+  // Tz, Rx, Ry solved from the three Z (out-of-plane) readings only.
+  const float tz = (mag1z + mag2z + mag3z) / 3.0f;
+  const float rx = (mag2z + mag3z - 2.0f * mag1z) / (3.0f * r);
+  const float ry = (mag2z - mag3z) / (r * sqrt(3.0f));
+
+  // Rz solved from the in-plane (X/Y) readings; the Tx/Ty and Ry*z0/Rx*z0
+  // cross-terms cancel in this sum because sum(xi) = sum(yi) = 0.
   const float swirlNum =
+      (mag1PosX * mag1y - mag1PosY * mag1x) +
       (mag2PosX * mag2y - mag2PosY * mag2x) +
-      (mag3PosX * mag3y - mag3PosY * mag3x) +
-      (mag1PosX * mag1y - mag1PosY * mag1x);
-  const float rz = swirlNum;
+      (mag3PosX * mag3y - mag3PosY * mag3x);
+  const float rz = swirlNum / (3.0f * r * r);
+
+  // Tx, Ty solved from the average in-plane reading, then decoupled from the
+  // rotation-induced offset introduced by the Z0 plane separation.
+  const float avgXMeas = (mag1x + mag2x + mag3x) / 3.0f;
+  const float avgYMeas = (mag1y + mag2y + mag3y) / 3.0f;
+  const float tx = avgXMeas - ry * z0;
+  const float ty = avgYMeas + rx * z0;
 
   // Apply sign fixes and gains
-  y[AXIS_TX] = Config::SIGN_AXIS[AXIS_TX] * tx * Config::GAIN_T[AXIS_TX];
-  y[AXIS_TY] = Config::SIGN_AXIS[AXIS_TY] * ty * Config::GAIN_T[AXIS_TY];
-  y[AXIS_TZ] = Config::SIGN_AXIS[AXIS_TZ] * tz * Config::GAIN_T[AXIS_TZ];
-  y[AXIS_RX] = Config::SIGN_AXIS[AXIS_RX] * rx * Config::GAIN_R[AXIS_RX - 3];
-  y[AXIS_RY] = Config::SIGN_AXIS[AXIS_RY] * ry * Config::GAIN_R[AXIS_RY - 3];
-  y[AXIS_RZ] = Config::SIGN_AXIS[AXIS_RZ] * rz * Config::GAIN_R[AXIS_RZ - 3];
+  y[AXIS_TX] = params_.signAxis[AXIS_TX] * tx * params_.gainT[AXIS_TX];
+  y[AXIS_TY] = params_.signAxis[AXIS_TY] * ty * params_.gainT[AXIS_TY];
+  y[AXIS_TZ] = params_.signAxis[AXIS_TZ] * tz * params_.gainT[AXIS_TZ];
+  y[AXIS_RX] = params_.signAxis[AXIS_RX] * rx * params_.gainR[AXIS_RX - 3];
+  y[AXIS_RY] = params_.signAxis[AXIS_RY] * ry * params_.gainR[AXIS_RY - 3];
+  y[AXIS_RZ] = params_.signAxis[AXIS_RZ] * rz * params_.gainR[AXIS_RZ - 3];
 }
 
 void MotionController::compute(const float raw[9], const float* baseline, float dt,
@@ -150,11 +163,11 @@ void MotionController::compute(const float raw[9], const float* baseline, float 
     if (fabs(y[i]) < dead) {
       filt_[i] = 0.0;
     } else {
-      filt_[i] = lowpass(filt_[i], y[i], dt, Config::SMOOTH_TAU_S);
+      filt_[i] = lowpass(filt_[i], y[i], dt, params_.smoothTauS);
     }
 
     const float limited =
-        clampf(filt_[i], -Config::AXIS_LIMIT, Config::AXIS_LIMIT);
+        clampf(filt_[i], -params_.axisLimit, params_.axisLimit);
     out[i] = hardZero(limited, dead);
     if (out[i] != 0.0) {
       motionActive_ = true;

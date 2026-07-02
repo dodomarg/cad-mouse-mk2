@@ -67,6 +67,7 @@ void setup() {
   sensorController.begin();
   motionController.reset();
   motionController.setCalibration(settings.calibration());
+  motionController.setMotionParams(settings.motion());
   telemetryController.begin(TELEMETRY_SERIAL);
 
   stateMachine.changeState(&StateMachine::calibratingState);

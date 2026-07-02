@@ -12,7 +12,8 @@ class MotionController;
 
 // On-device configuration portal. When the user holds both buttons at power-up
 // the firmware starts an open SoftAP and this HTTP server instead of the HID
-// pipeline, letting a phone or PC browser set the USB identity and run
+// pipeline, letting a phone or PC browser set the USB identity, tune the
+// motion model (magnet-plane geometry, gains, dead zones, smoothing) and run
 // full-range calibration. No host-side software or drivers required.
 //
 // ESP32-only feature; on other targets the methods compile to no-ops.
@@ -29,6 +30,9 @@ class ConfigPortal {
   void handleRoot();
   void handleGetSettings();
   void handlePostSettings();
+  void handleGetMotion();
+  void handlePostMotion();
+  void handleMotionReset();
   void handleLive();
   void handleCalZero();
   void handleCalStart();

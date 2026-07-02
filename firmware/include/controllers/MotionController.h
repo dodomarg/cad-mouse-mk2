@@ -18,13 +18,20 @@ class MotionController {
   // through unchanged.
   void setCalibration(const AxisCalibration& cal) { cal_ = cal; }
 
+  // Installs the motion model parameters (geometry, gains, signs, dead
+  // zones, smoothing, axis limit) used by mixAxes()/compute(). Takes effect
+  // on the next call, no recomputation needed since the geometric mix is
+  // evaluated directly from radius/z-offset each frame.
+  void setMotionParams(const MotionParams& params) { params_ = params; }
+
  private:
   static float clampf(float v, float lo, float hi);
   static float hardZero(float v, float thr);
   static float lowpass(float prev, float x, float dt, float tau);
-  static float axisBaseDead(int i);
+  float axisBaseDead(int i) const;
   float normalizeAxis(int i, float y) const;
   float filt_[6] = {};
   bool motionActive_ = false;
   AxisCalibration cal_;
+  MotionParams params_;
 };

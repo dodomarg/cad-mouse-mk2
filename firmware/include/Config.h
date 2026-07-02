@@ -19,20 +19,9 @@ const int PIN_MAG3_LS = D8;
 // Samples for calibration offset
 const int ZERO_SAMPLES = 200;
 
-// Gains and sign fixes
-const float GAIN_T[3] = {28.0, 28.0, 24.0};
-const float GAIN_R[3] = {18.0, 18.0, 20.0};
-const int SIGN_AXIS[6] = {-1, +1, -1, +1, +1, +1};
-
-// Dead zones
-const float DEAD_T = 16.0;
-const float DEAD_R = 20.0;
-
-// Smoothing
-const float SMOOTH_TAU_S = 0.08;
-
-// Final axis output range
-const float AXIS_LIMIT = 350.0;
+// Motion model gains, geometry, dead zones, smoothing and axis limit are all
+// runtime-configurable now (see Settings::MotionParams / the config portal's
+// /api/motion endpoint). Their defaults live in MotionParams, not here.
 
 // RGB LEDs
 const int LED_COUNT = 8;

@@ -9,6 +9,7 @@ const char* kNamespace = "cadmouse";
 const char* kKeyVid = "vid";
 const char* kKeyPid = "pid";
 const char* kKeyCal = "cal";
+const char* kKeyMotion = "motion";
 }  // namespace
 
 void Settings::begin() {
@@ -19,9 +20,15 @@ void Settings::begin() {
   pid_ = prefs.getUShort(kKeyPid, kDefaultPid);
 
   AxisCalibration cal;
-  const size_t read = prefs.getBytes(kKeyCal, &cal, sizeof(cal));
-  if (read == sizeof(cal)) {
+  const size_t calRead = prefs.getBytes(kKeyCal, &cal, sizeof(cal));
+  if (calRead == sizeof(cal)) {
     cal_ = cal;
+  }
+
+  MotionParams motion;
+  const size_t motionRead = prefs.getBytes(kKeyMotion, &motion, sizeof(motion));
+  if (motionRead == sizeof(motion)) {
+    motion_ = motion;
   }
 
   prefs.end();
@@ -34,6 +41,7 @@ void Settings::save() {
   prefs.putUShort(kKeyVid, vid_);
   prefs.putUShort(kKeyPid, pid_);
   prefs.putBytes(kKeyCal, &cal_, sizeof(cal_));
+  prefs.putBytes(kKeyMotion, &motion_, sizeof(motion_));
 
   prefs.end();
 }
@@ -42,6 +50,7 @@ void Settings::resetDefaults() {
   vid_ = kDefaultVid;
   pid_ = kDefaultPid;
   cal_ = AxisCalibration{};
+  motion_ = MotionParams{};
   save();
 }
 
@@ -53,6 +62,7 @@ void Settings::resetDefaults() {
   vid_ = kDefaultVid;
   pid_ = kDefaultPid;
   cal_ = AxisCalibration{};
+  motion_ = MotionParams{};
 }
 
 #endif

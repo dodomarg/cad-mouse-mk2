@@ -4,6 +4,8 @@
 
 #include <WiFi.h>
 
+#include <cstring>
+
 #include "Config.h"
 #include "Settings.h"
 #include "controllers/MotionController.h"
@@ -63,6 +65,53 @@ const char kIndexHtml[] PROGMEM = R"HTML(<!DOCTYPE html>
 </section>
 
 <section>
+  <h2 style="font-size:1.05rem">Motion Model</h2>
+  <p class="muted">Magnet-plane geometry (mm) and per-axis gains/signs/dead
+     zones. Sensors and magnets share the same 120&deg;-symmetric layout
+     (mag1 on -Y, mag2 in quadrant II, mag3 in quadrant I); only the radius
+     and the plane-to-plane Z offset matter.</p>
+  <div class="row">
+    <div>
+      <label for="radiusMm">Sensor/magnet radius (mm)</label>
+      <input id="radiusMm" inputmode="decimal" autocomplete="off">
+    </div>
+    <div>
+      <label for="zOffsetMm">Plane Z offset (mm)</label>
+      <input id="zOffsetMm" inputmode="decimal" autocomplete="off">
+    </div>
+  </div>
+  <label for="gainT">Translation gains Tx,Ty,Tz</label>
+  <input id="gainT" autocomplete="off">
+  <label for="gainR">Rotation gains Rx,Ry,Rz</label>
+  <input id="gainR" autocomplete="off">
+  <label for="signAxis">Axis signs Tx,Ty,Tz,Rx,Ry,Rz</label>
+  <input id="signAxis" autocomplete="off">
+  <div class="row">
+    <div>
+      <label for="deadT">Translation dead zone</label>
+      <input id="deadT" inputmode="decimal" autocomplete="off">
+    </div>
+    <div>
+      <label for="deadR">Rotation dead zone</label>
+      <input id="deadR" inputmode="decimal" autocomplete="off">
+    </div>
+  </div>
+  <div class="row">
+    <div>
+      <label for="smoothTauS">Smoothing tau (s)</label>
+      <input id="smoothTauS" inputmode="decimal" autocomplete="off">
+    </div>
+    <div>
+      <label for="axisLimit">Axis output limit</label>
+      <input id="axisLimit" inputmode="decimal" autocomplete="off">
+    </div>
+  </div>
+  <button onclick="saveMotion()">Save</button>
+  <button class="secondary" onclick="resetMotion()">Reset to defaults</button>
+  <div class="status" id="motionStatus"></div>
+</section>
+
+<section>
   <h2 style="font-size:1.05rem">Calibration</h2>
   <p class="muted" id="calState">Loading&hellip;</p>
   <p class="muted">1. Rest the device, press <b>Set Zero</b>. 2. Press <b>Start</b>
@@ -89,6 +138,42 @@ async function load() {
   document.getElementById('pid').value = s.pid;
   document.getElementById('calState').textContent =
     s.calValid ? 'Calibration data present.' : 'Not calibrated yet.';
+  await loadMotion();
+}
+async function loadMotion() {
+  const r = await fetch('/api/motion');
+  const m = await r.json();
+  document.getElementById('radiusMm').value = m.radiusMm;
+  document.getElementById('zOffsetMm').value = m.zOffsetMm;
+  document.getElementById('gainT').value = m.gainT.join(',');
+  document.getElementById('gainR').value = m.gainR.join(',');
+  document.getElementById('signAxis').value = m.signAxis.join(',');
+  document.getElementById('deadT').value = m.deadT;
+  document.getElementById('deadR').value = m.deadR;
+  document.getElementById('smoothTauS').value = m.smoothTauS;
+  document.getElementById('axisLimit').value = m.axisLimit;
+}
+async function saveMotion() {
+  const body = new URLSearchParams({
+    radiusMm: document.getElementById('radiusMm').value.trim(),
+    zOffsetMm: document.getElementById('zOffsetMm').value.trim(),
+    gainT: document.getElementById('gainT').value.trim(),
+    gainR: document.getElementById('gainR').value.trim(),
+    signAxis: document.getElementById('signAxis').value.trim(),
+    deadT: document.getElementById('deadT').value.trim(),
+    deadR: document.getElementById('deadR').value.trim(),
+    smoothTauS: document.getElementById('smoothTauS').value.trim(),
+    axisLimit: document.getElementById('axisLimit').value.trim(),
+  });
+  const r = await fetch('/api/motion', { method: 'POST', body });
+  document.getElementById('motionStatus').textContent =
+    r.ok ? 'Saved. Applied immediately, no reboot needed.' : 'Save failed - check values.';
+}
+async function resetMotion() {
+  const r = await fetch('/api/motion/reset', { method: 'POST' });
+  document.getElementById('motionStatus').textContent =
+    r.ok ? 'Reset to defaults.' : 'Reset failed.';
+  await loadMotion();
 }
 function clean(v) { return v.trim().replace(/^0x/i, ''); }
 async function postSettings() {
@@ -183,6 +268,54 @@ bool parseHex16(const String& s, uint16_t& out) {
   return true;
 }
 
+// Parses a comma-separated list of exactly `n` floats, e.g. "28,28,24".
+// Returns false (leaving `out` untouched) if the count or format is wrong.
+bool parseFloatList(const String& s, float* out, int n) {
+  int idx = 0;
+  int start = 0;
+  float parsed[8];
+  while (idx < n) {
+    int comma = s.indexOf(',', start);
+    const String token = (comma < 0) ? s.substring(start) : s.substring(start, comma);
+    if (token.length() == 0) return false;
+    char* end = nullptr;
+    const float v = strtof(token.c_str(), &end);
+    if (end == token.c_str() || *end != '\0') return false;
+    parsed[idx++] = v;
+    if (comma < 0) break;
+    start = comma + 1;
+  }
+  if (idx != n) return false;
+  for (int i = 0; i < n; i++) out[i] = parsed[i];
+  return true;
+}
+
+// Same as parseFloatList but for small signed integers (sign flips: -1/+1).
+bool parseIntList(const String& s, int8_t* out, int n) {
+  float tmp[8];
+  if (!parseFloatList(s, tmp, n)) return false;
+  for (int i = 0; i < n; i++) out[i] = static_cast<int8_t>(tmp[i]);
+  return true;
+}
+
+String joinFloats(const float* v, int n) {
+  String s;
+  for (int i = 0; i < n; i++) {
+    if (i) s += ',';
+    s += String(v[i], 4);
+  }
+  return s;
+}
+
+String joinInts(const int8_t* v, int n) {
+  String s;
+  for (int i = 0; i < n; i++) {
+    if (i) s += ',';
+    s += String((int)v[i]);
+  }
+  return s;
+}
+
 }  // namespace
 
 ConfigPortal::ConfigPortal(Settings& settings, SensorController& sensors,
@@ -194,6 +327,7 @@ void ConfigPortal::begin() {
   // then capture an initial rest baseline.
   sensors_.begin();
   captureBaseline();
+  motion_.setMotionParams(settings_.motion());
 
   WiFi.mode(WIFI_AP);
   WiFi.softAP(Config::CONFIG_AP_SSID);
@@ -201,6 +335,9 @@ void ConfigPortal::begin() {
   server_.on("/", HTTP_GET, [this]() { handleRoot(); });
   server_.on("/api/settings", HTTP_GET, [this]() { handleGetSettings(); });
   server_.on("/api/settings", HTTP_POST, [this]() { handlePostSettings(); });
+  server_.on("/api/motion", HTTP_GET, [this]() { handleGetMotion(); });
+  server_.on("/api/motion", HTTP_POST, [this]() { handlePostMotion(); });
+  server_.on("/api/motion/reset", HTTP_POST, [this]() { handleMotionReset(); });
   server_.on("/api/live", HTTP_GET, [this]() { handleLive(); });
   server_.on("/api/cal/zero", HTTP_POST, [this]() { handleCalZero(); });
   server_.on("/api/cal/start", HTTP_POST, [this]() { handleCalStart(); });
@@ -283,6 +420,105 @@ void ConfigPortal::handlePostSettings() {
   settings_.save();
 
   server_.send(200, "text/plain", "saved");
+}
+
+void ConfigPortal::handleGetMotion() {
+  const MotionParams& m = settings_.motion();
+
+  String json = "{\"radiusMm\":";
+  json += String(m.radiusMm, 4);
+  json += ",\"zOffsetMm\":";
+  json += String(m.zOffsetMm, 4);
+  json += ",\"gainT\":[" + joinFloats(m.gainT, 3) + "]";
+  json += ",\"gainR\":[" + joinFloats(m.gainR, 3) + "]";
+  json += ",\"signAxis\":[" + joinInts(m.signAxis, 6) + "]";
+  json += ",\"deadT\":";
+  json += String(m.deadT, 4);
+  json += ",\"deadR\":";
+  json += String(m.deadR, 4);
+  json += ",\"smoothTauS\":";
+  json += String(m.smoothTauS, 4);
+  json += ",\"axisLimit\":";
+  json += String(m.axisLimit, 4);
+  json += "}";
+
+  server_.send(200, "application/json", json);
+}
+
+void ConfigPortal::handlePostMotion() {
+  MotionParams m = settings_.motion();
+
+  // Every field is required and validated before anything is applied, so a
+  // single bad value doesn't leave the stored settings half-updated.
+  if (!server_.hasArg("radiusMm") || !server_.hasArg("zOffsetMm") ||
+      !server_.hasArg("gainT") || !server_.hasArg("gainR") ||
+      !server_.hasArg("signAxis") || !server_.hasArg("deadT") ||
+      !server_.hasArg("deadR") || !server_.hasArg("smoothTauS") ||
+      !server_.hasArg("axisLimit")) {
+    server_.send(400, "text/plain", "missing field");
+    return;
+  }
+
+  const String radiusMmStr = server_.arg("radiusMm");
+  const String zOffsetMmStr = server_.arg("zOffsetMm");
+  const String deadTStr = server_.arg("deadT");
+  const String deadRStr = server_.arg("deadR");
+  const String smoothTauSStr = server_.arg("smoothTauS");
+  const String axisLimitStr = server_.arg("axisLimit");
+
+  char* end = nullptr;
+  const float radiusMm = strtof(radiusMmStr.c_str(), &end);
+  if (end == radiusMmStr.c_str() || radiusMm <= 0.0f) {
+    server_.send(400, "text/plain", "invalid radiusMm");
+    return;
+  }
+  const float zOffsetMm = strtof(zOffsetMmStr.c_str(), &end);
+  if (end == zOffsetMmStr.c_str()) {
+    server_.send(400, "text/plain", "invalid zOffsetMm");
+    return;
+  }
+  float gainT[3];
+  float gainR[3];
+  int8_t signAxis[6];
+  if (!parseFloatList(server_.arg("gainT"), gainT, 3) ||
+      !parseFloatList(server_.arg("gainR"), gainR, 3) ||
+      !parseIntList(server_.arg("signAxis"), signAxis, 6)) {
+    server_.send(400, "text/plain", "invalid gainT/gainR/signAxis");
+    return;
+  }
+  const float deadT = strtof(deadTStr.c_str(), &end);
+  const float deadR = strtof(deadRStr.c_str(), &end);
+  const float smoothTauS = strtof(smoothTauSStr.c_str(), &end);
+  const float axisLimit = strtof(axisLimitStr.c_str(), &end);
+  if (deadT < 0.0f || deadR < 0.0f || smoothTauS < 0.0f || axisLimit <= 0.0f) {
+    server_.send(400, "text/plain", "invalid dead/smooth/limit");
+    return;
+  }
+
+  m.radiusMm = radiusMm;
+  m.zOffsetMm = zOffsetMm;
+  memcpy(m.gainT, gainT, sizeof(gainT));
+  memcpy(m.gainR, gainR, sizeof(gainR));
+  memcpy(m.signAxis, signAxis, sizeof(signAxis));
+  m.deadT = deadT;
+  m.deadR = deadR;
+  m.smoothTauS = smoothTauS;
+  m.axisLimit = axisLimit;
+
+  settings_.setMotion(m);
+  settings_.save();
+  motion_.setMotionParams(m);
+
+  server_.send(200, "text/plain", "saved");
+}
+
+void ConfigPortal::handleMotionReset() {
+  const MotionParams defaults;
+  settings_.setMotion(defaults);
+  settings_.save();
+  motion_.setMotionParams(defaults);
+
+  server_.send(200, "text/plain", "reset");
 }
 
 void ConfigPortal::handleLive() {
